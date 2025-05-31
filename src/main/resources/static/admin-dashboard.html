@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: #f8f9fa;
+      min-height: 100vh;
+    }
+    .card-link {
+      display: block;
+      padding: 1.5rem;
+      background: white;
+      border-radius: 12px;
+      text-decoration: none;
+      color: #000;
+      font-weight: 500;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      transition: all 0.2s ease;
+    }
+    .card-link:hover {
+      background: #fff4e1;
+      transform: scale(1.02);
+    }
+  </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+  <div class="container">
+    <a class="navbar-brand" href="/">e-Camp</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbar" aria-controls="navbar"
+            aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbar">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/admin-login.html">Log out</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="container my-5">
+  <h1 class="text-center display-6 mb-4">🛠️ Admin Dashboard</h1>
+  <div class="row g-4">
+    <div class="col-md-6"><a class="card-link" href="/admin-summary.html">📊 Camp Summaries</a></div>
+    <div class="col-md-6"><a class="card-link" href="/admin-locations.html">📍 Manage Locations</a></div>
+    <div class="col-md-6"><a class="card-link" href="/admin-groups.html">👥 Manage Camp Groups</a></div>
+    <div class="col-md-6"><a class="card-link" href="/admin-feedback.html">📝 Manage Feedbacks</a></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="bg-white text-center py-3 mt-auto">
+  <small>© 2025 e-Camp. All rights reserved.</small>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

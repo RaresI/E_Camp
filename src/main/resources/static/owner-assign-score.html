@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🎯 Assign Score</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .card {
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+  </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+  <div class="container">
+    <a class="navbar-brand" href="/">e-Camp</a>
+    <ul class="navbar-nav ms-auto">
+      <li class="nav-item"><a class="nav-link" href="/owner-dashboard.html">Dashboard</a></li>
+      <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<div class="container my-5">
+  <div class="text-center mb-4">
+    <h2 class="display-5">🎯 Assign Score</h2>
+  </div>
+
+  <div class="card p-4">
+    <form id="scoreForm">
+      <div class="mb-3">
+        <label for="campSelect" class="form-label">Select Camp</label>
+        <select id="campSelect" class="form-select"></select>
+      </div>
+
+      <div class="mb-3">
+        <label for="groupSelect" class="form-label">Select Group</label>
+        <select id="groupSelect" class="form-select" required></select>
+      </div>
+
+      <div class="mb-3">
+        <label for="activitySelect" class="form-label">Select Activity</label>
+        <select id="activitySelect" class="form-select" required></select>
+      </div>
+
+      <div class="mb-4">
+        <label for="points" class="form-label">Points</label>
+        <input type="number" id="points" class="form-control" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100">Assign Score</button>
+    </form>
+  </div>
+
+  <div class="mt-4 text-center">
+    <a href="/owner-dashboard.html" class="btn btn-outline-primary mt-4">← Back to Dashboard</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="bg-white text-center py-3 mt-auto">
+  <small>© 2025 e-Camp. All rights reserved.</small>
+</footer>
+
+<script>
+  async function loadCamps() {
+    const res = await fetch("/api/camps", { credentials: "include" });
+    if (res.status >= 400) return window.location.href = "/owner-login.html";
+    const camps = await res.json();
+    const select = document.getElementById("campSelect");
+    camps.forEach(c => select.add(new Option(`${c.name}`, c.id)));
+    select.addEventListener("change", () => loadGroupsAndActivities(select.value));
+    if (camps.length) loadGroupsAndActivities(camps[0].id);
+  }
+
+  async function loadGroupsAndActivities(campId) {
+    const [gRes, aRes] = await Promise.all([
+      fetch(`/api/groups/byCamp/${campId}`, { credentials: "include" }),
+      fetch(`/api/activities/byCamp/${campId}`, { credentials: "include" })
+    ]);
+    if (gRes.status >= 400 || aRes.status >= 400) return window.location.href = "/owner-login.html";
+    const groups = await gRes.json();
+    const acts = await aRes.json();
+
+    const gs = document.getElementById("groupSelect");
+    const as = document.getElementById("activitySelect");
+    gs.innerHTML = "";
+    as.innerHTML = "";
+    groups.forEach(g => gs.add(new Option(g.groupName, g.id)));
+    acts.forEach(a => as.add(new Option(a.name, a.id)));
+  }
+
+  document.getElementById("scoreForm").addEventListener("submit", async e => {
+    e.preventDefault();
+    const payload = {
+      groupId: +document.getElementById("groupSelect").value,
+      activityId: +document.getElementById("activitySelect").value,
+      points: +document.getElementById("points").value
+    };
+    const res = await fetch("/api/scores", {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    if (res.status >= 400) {
+      if (res.status === 401 || res.status === 403) return window.location.href = "/owner-login.html";
+      const err = await res.text();
+      return alert("Error: " + err);
+    }
+    alert("✅ Score assigned!");
+    e.target.reset();
+  });
+
+  loadCamps();
+</script>
+
+</body>
+</html>

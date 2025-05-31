@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>👪 Parent Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+          background: linear-gradient(to right, #dfe9f3, #ffffff);
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+        }
+        .dashboard {
+          padding: 3rem 1rem;
+        }
+        .card-link {
+          text-decoration: none;
+          color: inherit;
+        }
+        .card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 0 10px rgba(0,0,0,0.1);
+          transition: 0.2s ease;
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+    <div class="container">
+        <a class="navbar-brand" href="/">e-Camp</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/parent-dashboard.html">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="/parent-login.html">Log out</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- DASHBOARD -->
+<section class="dashboard container">
+    <h2 class="mb-4 text-center display-6">👪 Parent Dashboard</h2>
+    <div class="row g-4 justify-content-center">
+
+        <div class="col-md-6">
+            <a href="/parent-children.html" class="card card-link shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">👶 Manage My Children</h5>
+                    <p class="card-text">Add, view or edit your children’s information and profiles.</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-6">
+            <a href="/parent-registrations.html" class="card card-link shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">📅 Camp & Trip Registration</h5>
+                    <p class="card-text">Register your children for camps and optional trips.</p>
+                </div>
+            </a>
+        </div>
+
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-light text-center py-3 mt-auto">
+    <small>© 2025 e-Camp. All rights reserved.</small>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

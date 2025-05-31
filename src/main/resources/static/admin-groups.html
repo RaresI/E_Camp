@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Camp Groups</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light d-flex flex-column min-vh-100">
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <div class="container">
+        <a class="navbar-brand" href="/">e-Camp</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
+                aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbar">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="/admin-dashboard.html">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="/admin-summary.html">Summaries</a></li>
+                <li class="nav-item"><a class="nav-link" href="/admin-login.html">Log out</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<div class="container py-5">
+    <h2 class="mb-4 text-center display-5">👥 Camp Groups</h2>
+
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-6">
+            <label for="campSelect" class="form-label">Select Camp:</label>
+            <select id="campSelect" class="form-select"></select>
+        </div>
+    </div>
+
+    <div class="text-center mb-5">
+        <button id="genBtn" class="btn btn-primary">Generate Groups</button>
+    </div>
+
+    <div id="groupContainer" class="row gy-4"></div>
+
+    <div class="text-center">
+        <a href="/admin-dashboard.html" class="btn btn-outline-primary mt-4">← Back to Dashboard</a>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="bg-white text-center py-3 mt-auto">
+    <small>© 2025 e-Camp. All rights reserved.</small>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    async function loadCamps() {
+      const res = await fetch("/api/camps", { credentials: "include" });
+      if (!res.ok) return location.href = "/admin-login.html";
+      const camps = await res.json();
+      const sel = document.getElementById("campSelect");
+      camps.forEach(c => sel.add(new Option(`${c.name}`, c.id)));
+      sel.addEventListener("change", () => loadGroups(sel.value));
+      if (camps.length) loadGroups(camps[0].id);
+    }
+
+    async function generateGroups() {
+      const id = document.getElementById("campSelect").value;
+      const res = await fetch(`/api/groups/generate/${id}`, {
+        method: "POST",
+        credentials: "include"
+      });
+      if (!res.ok) return alert("❌ Failed to generate groups");
+      loadGroups(id);
+    }
+
+    async function loadGroups(campId) {
+      const res = await fetch(`/api/groups/byCamp/${campId}`, {
+        credentials: "include"
+      });
+      if (!res.ok) return location.href = "/admin-login.html";
+      const groups = await res.json();
+      const container = document.getElementById("groupContainer");
+      container.innerHTML = "";
+      groups.forEach(g => {
+        if (!g.children?.length) return;
+        const div = document.createElement("div");
+        div.className = "col-md-6";
+        div.innerHTML = `
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">${g.groupName}</h5>
+              <ul class="list-unstyled mb-0">${g.children.map(c => `<li>👤 ${c.name} (${c.school})</li>`).join("")}</ul>
+            </div>
+          </div>`;
+        container.appendChild(div);
+      });
+    }
+
+    document.getElementById("genBtn").addEventListener("click", generateGroups);
+    loadCamps();
+</script>
+</body>
+</html>
